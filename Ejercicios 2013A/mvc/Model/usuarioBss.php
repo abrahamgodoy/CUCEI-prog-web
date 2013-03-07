@@ -1,50 +1,40 @@
-<?php 
+<?php
 
 /**
- * @package Ejercicios2013A
- * @subpackage claseUsuario
- * @author Michelle Torres <lic.nancy.torres@gmail.com>
- * @version 1.0
+ * @package mvc
+ * @subpackage model
  */
 
-class Usuario{
-	//Atributos
-	private $id;
-	private $nombre;
-	private $mail;
-	private $pass;
-	private $privilegio;
-
-	//Métodos
+class usuarioBss{
 	/**
 	 * @param string $nombre
 	 * @param string $mail
 	 * @param string $pass encriptado md5
 	 * @param int $privilegio indica el perfil de permisos
-	 * @return mixed $int con el id y en caso de falla un FALSE
+	 * @return mixed usuarioClass object y en caso de falla un FALSE
 	 */
-	function insertarUsuario($nombre,$mail,$pass,$privilegio){
-		//Asignar variables al objeto
-		$this -> nombre 		= $nombre;
-		$this -> mail 			= $mail;
-		$this -> pass 			= $pass;
-		$this -> privilegio 	= $privilegio;
-
+	function insertar($nombre,$mail,$pass,$privilegio){
 		//Conectarse a la base de datos
 		require('dbdata.inc');
 		@$conexion  = new mysqli($hostdb, $userdb, $passdb, $db); 
 
 		if($conexion -> connect_errno)
-			die('INS. No se ha podido realizar la conexion a la bd'.$conexion->connect_error);
+			die('No se ha podido realizar la conexion a la bd'.$conexion->connect_error);
+
+		//Asignar variables al objeto
+		$nombre 		= $conexion->real_escape_string($nombre);
+		$mail 			= $conexion->real_escape_string($mail);
+		$pass 			= $conexion->real_escape_string($pass);
+		$privilegio 	= $conexion->real_escape_string($privilegio);
 
 		//Crear el query
 		$query = "INSERT INTO 
 					usuario (nombre, mail, pass, privilegio)
 				  VALUES 
-					('$this->nombre',
-					 '$this->mail',
-					 '$this->pass',
-					 $this->privilegio)";
+					('$nombre',
+					 '$mail',
+					 '$pass',
+					 $privilegio)";
 
 		//Ejecutar el query
 		$conexion -> query($query);
@@ -56,17 +46,21 @@ class Usuario{
 			return FALSE;
 		}
 		else{
-			$this -> id = $conexion->insert_id;
+			$id = $conexion->insert_id;
 			//Cerrar la conexion
 			$conexion -> close();
-			return $this -> id;
+
+			//Arreglo del usuario
+			$user = new usuarioClass($id, $nombre, $pass, $privilegio, $mail);
+	
+			return $user;
 		}
 	}
 
 	/**
 	 * @return mixed array with all the users, or FALSE in fail
 	 */
-	function consultar(){
+	function listar(){
 		//Conectarse a la base de datos
 		require('dbdata.inc');
 		@$conexion  = new mysqli($hostdb, $userdb, $passdb, $db); 
@@ -102,7 +96,7 @@ class Usuario{
 
 	/**
 	 * @param int $id del usuario
-	 * @return boolean
+	 * @return object usuarioClass, FALSE en caso de falla
 	 */
 	function consultarPorId($id){
 		//Conectarse a la base de datos
@@ -111,6 +105,9 @@ class Usuario{
 
 		if($conexion -> connect_errno)
 			die('CONS. No se ha podido realizar la conexion a la bd'.$conexion->connect_error);
+
+		//Limpio las variables
+		$id = $conexion->real_escape_string($id);
 
 		//Crear el query
 		$query = 'SELECT
@@ -136,12 +133,8 @@ class Usuario{
 			$fila = $resultado -> fetch_assoc();
 			
 			if ($fila['id'] == $id ){
-				$this -> id = $fila['id'];
-				$this -> nombre = $fila['nombre'];
-				$this -> mail = $fila['mail'];
-				$this -> pass = $fila['pass'];
-				$this -> privilegio = $fila['privilegio'];
-				return TRUE;
+				$user = new usuarioClass($fila['id'],$fila['nombre'],$fila['mail'],$fila['pass'],$fila['privilegio']);
+				return $user;
 			}
 			else
 				return FALSE;			
@@ -149,11 +142,3 @@ class Usuario{
 	}
 }
 
-$nuevoUsuario = new Usuario();
-$nuevoUsuario -> insertarUsuario('juan','juan@gmail.com','1234',1);
-
-var_dump($nuevoUsuario -> consultar());
-
-if ($nuevoUsuario -> consultarPorId(5))
-	var_dump($nuevoUsuario);
-?>
