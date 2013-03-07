@@ -24,25 +24,19 @@ class Usuario{
 	 * @return mixed $int con el id y en caso de falla un FALSE
 	 */
 	function insertarUsuario($nombre,$mail,$pass,$privilegio){
+		global $conexion;
 		//Asignar variables al objeto
 		$this -> nombre 		= $nombre;
 		$this -> mail 			= $mail;
 		$this -> pass 			= $pass;
 		$this -> privilegio 	= $privilegio;
 
-		//Conectarse a la base de datos
-		require_once('dbdata.inc');
-		@$conexion  = new mysqli($hostdb, $userdb, $passdb, $db); 
-
-		if($conexion -> connect_errno)
-			die('No se ha podido realizar la conexion a la bd');
-
 		//Crear el query
 		$query = "INSERT INTO 
 					usuario (nombre, mail, pass, privilegio)
 				  VALUES 
 					('$this->nombre',
-					 '$this->mail,
+					 '$this->mail',
 					 '$this->pass',
 					 $this->privilegio)";
 
@@ -50,15 +44,11 @@ class Usuario{
 		$conexion -> query($query);
 
 		if($conexion->errno){
-			echo 'FALLO '.$conexion->errno.' : '.$conexion->error;
-			//Cerrar la conexion
-			$conexion -> close();
+			echo 'No inserta: '.$conexion->errno.' : '.$conexion->error;
 			return FALSE;
 		}
 		else{
 			$this -> id = $conexion->insert_id;
-			//Cerrar la conexion
-			$conexion -> close();
 			return $this -> id;
 		}
 	}
@@ -67,12 +57,7 @@ class Usuario{
 	 * @return mixed array with all the users, or FALSE in fail
 	 */
 	function consultar(){
-		//Conectarse a la base de datos
-		require_once('dbdata.inc');
-		@$conexion  = new mysqli($hostdb, $userdb, $passdb, $db); 
-
-		if($conexion -> connect_errno)
-			die('No se ha podido realizar la conexion a la bd');
+		global $conexion;
 
 		//Crear el query
 		$query = 'SELECT
@@ -84,14 +69,12 @@ class Usuario{
 		$resultado = $conexion -> query($query);
 
 		if($conexion->errno){
-			echo 'FALLO '.$conexion->errno.' : '.$conexion->error;
+			echo 'No consulta: '.$conexion->errno.' : '.$conexion->error;
 			//Cerrar la conexion
 			$conexion -> close();
 			return FALSE;
 		}
 		else{
-			//Cerrar la conexion
-			$conexion -> close();
 
 			while ($fila = $resultado -> fetch_assoc())
 				$usuarios[] = $fila;
@@ -105,12 +88,7 @@ class Usuario{
 	 * @return boolean
 	 */
 	function consultarPorId($id){
-		//Conectarse a la base de datos
-		require_once('dbdata.inc');
-		@$conexion  = new mysqli($hostdb, $userdb, $passdb, $db); 
-
-		if($conexion -> connect_errno)
-			die('No se ha podido realizar la conexion a la bd');
+		global $conexion;
 
 		//Crear el query
 		$query = 'SELECT
@@ -124,14 +102,10 @@ class Usuario{
 		$resultado = $conexion -> query($query);
 
 		if($conexion->errno){
-			echo 'FALLO '.$conexion->errno.' : '.$conexion->error;
-			//Cerrar la conexion
-			$conexion -> close();
+			echo 'No consulta por id: '.$conexion->errno.' : '.$conexion->error;
 			return FALSE;
 		}
 		else{
-			//Cerrar la conexion
-			$conexion -> close();
 
 			$fila = $resultado -> fetch_assoc();
 			
@@ -149,12 +123,22 @@ class Usuario{
 	}
 }
 
+// Aqui inicia el controlador
+
+//Conectarse a la base de datos
+require_once('dbdata.inc');
+@$conexion  = new mysqli($hostdb, $userdb, $passdb, $db); 
+
+if($conexion -> connect_errno)
+	die('No se ha podido realizar la conexion a la bd');
+
 $nuevoUsuario = new Usuario();
-//$nuevoUsuario -> insertarUsuario('juan','juan@gmail.com','1234',1);
+$nuevoUsuario -> insertarUsuario('pedro','correo','1234',1);
 
-
-//var_dump($nuevoUsuario -> consultar());
+var_dump($nuevoUsuario -> consultar());
 
 if ($nuevoUsuario -> consultarPorId(5))
 	var_dump($nuevoUsuario);
+
+$conexion -> close();
 ?>
