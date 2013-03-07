@@ -154,6 +154,6 @@ $nuevoUsuario -> insertarUsuario('juan','juan@gmail.com','1234',1);
 
 var_dump($nuevoUsuario -> consultar());
 
-if ($nuevoUsuario -> consultarPorId(5))
+if ($nuevoUsuario -> consultarPorId('SELECT * FROM USUARIO WHERE "1"))
 	var_dump($nuevoUsuario);
 ?>

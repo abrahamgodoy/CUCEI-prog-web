@@ -21,7 +21,7 @@ class usuarioBss{
 		if($conexion -> connect_errno)
 			die('No se ha podido realizar la conexion a la bd'.$conexion->connect_error);
 
-		//Asignar variables al objeto
+		//Limpiar las variables recibidas
 		$nombre 		= $conexion->real_escape_string($nombre);
 		$mail 			= $conexion->real_escape_string($mail);
 		$pass 			= $conexion->real_escape_string($pass);
