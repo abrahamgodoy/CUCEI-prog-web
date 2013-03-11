@@ -1,0 +1,16 @@
+# Modelo Vista Controlador en PHP
+
+## POO, MVC y mysqli
+
+1. Crea una carpeta para tu proyecto
+1. Crea la estructura para el modelo MVC (una carpeta para modelo, una para vista y una para el controlador.
+1. Genera el archivo index que utilice un controlador estándar.
+1. Crea una base de datos idealmente relacionada con tu proyecto.
+1. En el modelo crea un archivo con los datos para la conexion.
+1. En el modelo crea también una clase Bussiness(BSS) para la tabla que creaste en tu base de datos.
+1. En el modelo crea además una clase con los atributos de clase y su constructor.
+1. En tu clase bussiness genera los métodos para listar, consultar por id, consultar por nombre, editar y eliminar.
+1. En el controlador realiza las validaciones de los datos obtenidos por GET y envialos al modelo.
+1. Los datos recibidos por el modelo envialos a la vista para ser mostrados.
+
+Nota: El modelo debe regresar arreglos de objetos, o en caso contrario, un solo objeto.
