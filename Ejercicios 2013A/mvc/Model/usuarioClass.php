@@ -15,5 +15,4 @@ class usuarioClass{
 		$this->pass 	= $pass;
 		$this->privilegio = $privilegio;
 	}
-e
 }

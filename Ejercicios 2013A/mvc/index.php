@@ -4,11 +4,20 @@
  * @package mvc
  */
 
-//Necesitamos utilizar el controlador
-include('Controller/StdCtl.php');
+//Creamos el contralador en base a lo requerido y lo mandamos a ejecutar
+switch($_REQUEST['modulo'])
+{
+	case 'usuario': 
+		include('Controller/usuarioCtl.php');
+		$controlador = new usuarioCtl();
+		break;
+	case 'producto' : 
+		include('Controller/productoCtl.php');
+		$controlador = new productoCtl(); 
+		break;
+}
 
-//Creamos el contralador estándar y lo mandamos a ejecutar
-$controlador = new StdCtl();
+//Ejecutamos el controlador
 $controlador -> ejecutar();
 
 ?>

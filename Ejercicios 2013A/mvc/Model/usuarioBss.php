@@ -6,6 +6,7 @@
  */
 
 class usuarioBss{
+	
 	/**
 	 * @param string $nombre
 	 * @param string $mail
@@ -14,18 +15,21 @@ class usuarioBss{
 	 * @return mixed usuarioClass object y en caso de falla un FALSE
 	 */
 	function insertar($nombre,$mail,$pass,$privilegio){
+		//Cargar clase usuario
+		require('usuarioClass.php');
+		
 		//Conectarse a la base de datos
 		require('dbdata.inc');
-		@$conexion  = new mysqli($hostdb, $userdb, $passdb, $db); 
-
-		if($conexion -> connect_errno)
-			die('No se ha podido realizar la conexion a la bd'.$conexion->connect_error);
+		require('dbClass.php');
+		$conexion  = new DB($hostdb, $userdb, $passdb, $db); 
+		if(!$conexion -> conecta())
+			die('No se ha podido realizar la conexion a la bd');
 
 		//Limpiar las variables recibidas
-		$nombre 		= $conexion->real_escape_string($nombre);
-		$mail 			= $conexion->real_escape_string($mail);
-		$pass 			= $conexion->real_escape_string($pass);
-		$privilegio 	= $conexion->real_escape_string($privilegio);
+		$nombre = $conexion->limpiarVariable($nombre);
+		$mail = $conexion->limpiarVariable($mail);
+		$pass = $conexion->limpiarVariable($pass);
+		$privilegio = $conexion->limpiarVariable($privilegio);
 
 		//Crear el query
 		$query = "INSERT INTO 
@@ -37,18 +41,18 @@ class usuarioBss{
 					 $privilegio)";
 
 		//Ejecutar el query
-		$conexion -> query($query);
+		$resultado = $conexion -> ejecutarConsulta($query);
 
-		if($conexion->errno){
-			echo 'FALLO '.$conexion->errno.' : '.$conexion->error;
+		if($resultado == FALSE){
+			echo 'FALLO la consulta';
 			//Cerrar la conexion
-			$conexion -> close();
+			$conexion -> cerrar();
 			return FALSE;
 		}
 		else{
-			$id = $conexion->insert_id;
+			$id = $resultado;
 			//Cerrar la conexion
-			$conexion -> close();
+			$conexion -> cerrar();
 
 			//Arreglo del usuario
 			$user = new usuarioClass($id, $nombre, $pass, $privilegio, $mail);
@@ -63,10 +67,11 @@ class usuarioBss{
 	function listar(){
 		//Conectarse a la base de datos
 		require('dbdata.inc');
-		@$conexion  = new mysqli($hostdb, $userdb, $passdb, $db); 
+		require('dbClass.php');
+		$conexion  = new DB($hostdb, $userdb, $passdb, $db); 
 
-		if($conexion -> connect_errno)
-			die('LIST. No se ha podido realizar la conexion a la bd'.$conexion->connect_error);
+		if(!$conexion)
+			die('LIST. No se ha podido realizar la conexion a la bd');
 
 		//Crear el query
 		$query = 'SELECT
@@ -75,22 +80,20 @@ class usuarioBss{
 					usuario';
 
 		//Ejecutar el query
-		$resultado = $conexion -> query($query);
+		$resultado = $conexion -> ejecutarConsulta($query);
 
-		if($conexion->errno){
-			echo 'FALLO '.$conexion->errno.' : '.$conexion->error;
+		if(!$resultado){
+			echo 'FALLO la consulta';
+			
 			//Cerrar la conexion
-			$conexion -> close();
+			$conexion -> cerrar();
 			return FALSE;
 		}
 		else{
 			//Cerrar la conexion
-			$conexion -> close();
+			$conexion -> cerrar();
 
-			while ($fila = $resultado -> fetch_assoc())
-				$usuarios[] = $fila;
-			
-			return $usuarios;			
+			return $resultado;			
 		}
 	}
 
@@ -99,15 +102,19 @@ class usuarioBss{
 	 * @return object usuarioClass, FALSE en caso de falla
 	 */
 	function consultarPorId($id){
+		//Cargar clase usuario
+		require('usuarioClass.php');
+		
 		//Conectarse a la base de datos
 		require('dbdata.inc');
-		@$conexion  = new mysqli($hostdb, $userdb, $passdb, $db); 
+		require('dbClass.php');
+		$conexion  = new DB($hostdb, $userdb, $passdb, $db); 
 
-		if($conexion -> connect_errno)
-			die('CONS. No se ha podido realizar la conexion a la bd'.$conexion->connect_error);
+		if(!$conexion)
+			die('No se ha podido realizar la conexion a la bd');
 
 		//Limpio las variables
-		$id = $conexion->real_escape_string($id);
+		$id = $conexion->limpiarVariable($id);
 
 		//Crear el query
 		$query = 'SELECT
@@ -118,22 +125,21 @@ class usuarioBss{
 					id = '.$id;
 
 		//Ejecutar el query
-		$resultado = $conexion -> query($query);
+		$resultado = $conexion -> ejecutarConsulta($query);
 
-		if($conexion->errno){
-			echo 'FALLO '.$conexion->errno.' : '.$conexion->error;
+		if(!$resultado){
+			echo 'FALLO la consulta';
+			
 			//Cerrar la conexion
-			$conexion -> close();
+			$conexion -> cerrar();
 			return FALSE;
 		}
 		else{
 			//Cerrar la conexion
-			$conexion -> close();
-
-			$fila = $resultado -> fetch_assoc();
+			$conexion -> cerrar();
 			
-			if ($fila['id'] == $id ){
-				$user = new usuarioClass($fila['id'],$fila['nombre'],$fila['mail'],$fila['pass'],$fila['privilegio']);
+			if ($resultado[0]['id'] == $id ){
+				$user = new usuarioClass($resultado[0]['id'],$resultado[0]['nombre'],$resultado[0]['mail'],$resultado[0]['pass'],$resultado[0]['privilegio']);
 				return $user;
 			}
 			else
