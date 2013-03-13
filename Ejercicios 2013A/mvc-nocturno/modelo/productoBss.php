@@ -1,4 +1,4 @@
-<?php
+<?php	
 
 class productoBss{
 
@@ -8,11 +8,15 @@ class productoBss{
 	function listar(){
 		//Cargo los datos para la conexión
 		include('db_data.inc');
-
+		include('databaseClass.php');
+		$conexion = new DB($hostdb, $userdb, $passdb, $db);
+		
 		//Creo mi conexión
-		$conexion = new mysqli($hostdb, $userdb, $passdb, $db);
-		if($conexion->connect_errno)
+		$status = $conexion->conectar();
+		//En caso de que devuelva una falla
+		if($status === FALSE){
 			die('No se pudo conectar');
+		}
 		
 		//Creo mi query
 		$consulta = "SELECT
@@ -21,25 +25,29 @@ class productoBss{
 						producto";
 
 		//Ejecuto la consulta
-		$resultado = $conexion -> query($consulta);
+		$resultado = $conexion -> ejecutarConsulta($consulta);
 
-		if($conexion->errno){
-			$conexion -> close();	
+		//Si fue una falla
+		if($conexion === FALSE){
+			$conexion -> cerrar();	
 			return FALSE;
 		}
 
 		//Cierro la conexion
-		$conexion -> close();
+		$conexion -> cerrar();
 
-		//Si el query no devolvio filas
-		if ( !$resultado->num_rows > 0 )
-			return FALSE;
+		//Proceso el arreglo para convertirlo
+		//en una colección de objetos de tipo
+		//producto.
+		require('productoClass.php');
 
-		//Procesamos el resultado para convertirlo en un array
-		while ( $fila = $resultado -> fetch_assoc() )
-			$productos[] = $fila;
-
+		//Por cada producto
+		foreach($resultado as $prod){
+			$producto = new Producto($prod['idproducto'], $prod['nombre'], $prod['descripcion'], $prod['precio'], $prod['costo']);
+			$lista_productos[] = $producto;
+		}
+		
 		//Regreso los productos
-		return $productos;
+		return $lista_productos;
 	}
 }

@@ -8,9 +8,14 @@ class Producto{
 	public $precio;
 	public $costo;
 
-	function __construct($i, $n, $d, $p, $c){
-		$this -> id 	= $i;
-		$this -> nombre	= $n;
-		$this -> 
+	/**
+	 * @param
+	 */
+	function __construct($id, $nombre, $desc, $precio, $costo){
+		$this -> id 	= $id;
+		$this -> nombre	= $nombre;
+		$this -> descripcion = $desc;
+		$this -> precio = $precio;
+		$this -> costo = $costo;
 	}
 }
