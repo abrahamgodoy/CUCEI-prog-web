@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title></title>
+</head>
+<body>
+	<h1>hola</h1>
+	<script type="text/javascript" >
+		//Alert
+		//alert('Hola mundo');
+		
+		//Le preguntamos algo al usuario y lo guardamos
+		//var r = prompt('ola k ase');
+
+		//Mostramos lo que el usuario escribio
+		//alert(r);
+		
+		//Confirm
+		//var o = confirm('Quieres chela?');
+		//alert(o);
+		
+	</script>
+	<p>algo</p>
+	<script type="text/javascript" >
+		document.write('<p>algo</p>');
+	</script>
+	<h1 onclick="alert('le diste click');">Probando cosas</h1>
+	<script type="text/javascript" >
+		//Versión del navegador
+		document.write('<p>'+navigator.appVersion+'</p>');
+		
+		//Abrir una nueva ventana
+		//window.open('http://www.google.com','mio');
+	</script>
+	
+	<form>
+		<input id="entrada" type="text" onkeyup="convierte(this)" />
+		<button type="button" onclick="agregaLista()">Agregar</button>
+		<br />		
+		<textarea id="lista" rows="15" cols="30"></textarea>	
+	</form>
+	
+	<script type="text/javascript" >
+		function convierte(miInput){
+			//Cambio el valor del input a mayusculas
+			miInput.value = miInput.value.toUpperCase();		
+		}
+		
+		function agregaLista(){
+			//Obtengo el objeto de tipo input
+			var input = document.getElementById('entrada');
+			//Obtengo el objeto textarea
+			var textarea = document.getElementById('lista');
+			
+			textarea.value += '\n' + input.value;
+			input.value = '';
+		}
+	</script>
+</body>
+</html>

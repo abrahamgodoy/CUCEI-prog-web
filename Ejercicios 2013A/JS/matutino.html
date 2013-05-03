@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title></title>
+</head>
+<body>
+
+<script type="text/javascript" >
+function change(texto){
+	texto.value = texto.value.toUpperCase();
+}
+
+function agrega(){
+	input = document.getElementById('texto');
+	textarea = document.getElementById('lista');
+	textarea.value += '\n' + input.value;
+	input.value = '';
+}
+</script>
+
+<h1>Form</h1>
+
+<form>
+<input id='texto' type="text" onkeyup="change(this);"/>
+<button type="button" onclick="agrega()">Agregar</button>
+<textarea id='lista'></textarea>
+</form>
+
+
+</body>
+</html>
