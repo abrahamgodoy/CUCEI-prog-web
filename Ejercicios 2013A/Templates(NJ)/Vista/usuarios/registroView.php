@@ -1,0 +1,1 @@
+campos get: 'registro = inserta', 'user', 'pass1', 'pass2', 'email'

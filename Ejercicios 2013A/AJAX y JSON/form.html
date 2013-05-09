@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>AJAX y JSON</title>
+<script type="text/javascript" src="ajax.js"></script>
+<script type="text/javascript" >
+	//funcion para cargar los datos del formulario
+	function cargaForm(){
+		//Crear objeto XMLHTTPRequest
+		var ajax = nuevoAjax();
+		
+		//Abrir la comunicación asincrona
+		ajax.open("post","listaCategorias.php",true);
+
+		//Obtener el resultado
+		ajax.onreadystatechange = function(){
+			if (ajax.readyState == 4){
+				//Procesar el resultado como JSON
+				var response = eval(ajax.responseText);
+				console.log(response);
+				console.log(response[0].id);
+				//LLenar el elemento "categoria" con los datos del JSON	
+				for(categoria in response){
+					//Crear el elemento option
+					//Crear el texto del elemento
+					//Agregar el texto al elemento
+					//Agregar los atributos
+					//Agregar el nodo al select
+				}
+			}
+		}
+		ajax.send(null);
+	}
+</script>
+</head>
+<body onload="cargaForm();">
+	<form id="miform">
+		<input type="text" value="{nombre}" />
+		<select id="categoria" name="categoria">
+			<option value="0">Selecciona una opcion...</option>
+		</select>
+	</form>
+</body>
+</html>

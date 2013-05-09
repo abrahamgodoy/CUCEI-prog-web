@@ -1,0 +1,1 @@
+parametros de get 'user' y 'pass'

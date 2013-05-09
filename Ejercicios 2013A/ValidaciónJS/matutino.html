@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title></title>
+<style>
+.error{
+color: red;
+font-weight: bold;
+background-color: #F3E2A9;
+display: inline;
+}
+</style>
+</head>
+<body>
+<script type="text/javascript" src="valida.js"></script>
+<form action="Menu.php" method="post" name="cliente" id="cliente">
+				    <label class="label">Usuario *</label>
+					<input type="text" class="span2" name="username" placeholder="Ingrese Usuario..." required="required"/><br>
+					<label class="label">Password *</label>
+					<input type="password" class="span2" name="password" placeholder="Ingrese Contrasena..." required="required"/><br>
+					<label class="label">Email *</label>
+					<input type="email" class="span2" name="email" placeholder="Ingrese Email" required="required"/><br>
+					<label class="label">Nombre(s) *</label>
+					<input type="text" class="span2" name="nombre" placeholder="Nombre..." required="required"/><br>
+					<label class="label">Apellido Paterno *</label>
+					<input type="text" class="span2" name="apellidoPat" placeholder="Apellido paterno..." required="required"/><br>
+					<label class="label">Apellido Materno *</label>
+					<input type="text" class="span2" name="apellidoMat" placeholder="Apellido materno..." required="required"/><br>
+					<label class="label">RFC *</label>
+					<input type="text" class="span2" name="RFC" placeholder="RFC..." required="required"/><br>
+					<label class="label">Telefono *</label>
+					<input type="tel" class="span2" name="telefono" placeholder="Telefono..." required="required"/><br>
+
+					<label class="label">Es persona fisica</label>
+					<input type="checkbox" name="esPersonaFisica"/> <br>
+
+					<label class="label-info">Direccion</label>
+
+					<label class="label">Calle *</label>
+					<input type="text" class="span2" name="direccion[calle]" placeholder="Calle..." required="required"/><br>
+					<label class="label">Numero Interior *</label>
+					<input type="number" class="span2" name="direccion[numInterior]" placeholder="Numero Interior..." required="required"/><br>
+					<label class="label">Numero Exterior </label>
+					<input type="number" class="span2" name="direccion[numExterior]" placeholder="Numero Exterior..." /><br>
+					<label class="label">Colonia *</label>
+					<input type="text" class="span2" name="direccion[colonia]" placeholder="Colonia..." required="required"/><br>
+					<label class="label">C.P. *</label>
+					<input type="number" id="cp" class="span2" name="direccion[cp]" placeholder="CP..." required="required"/><br>
+					<label class="label">Estado *</label>
+					<select class="span2" id="estado" name="direccion[estado]" placeholder="Estado..." required="required">
+						<option value="0">Selecciona...</option>
+						<option value="1">Algo</option>					
+					</select><br>
+					<label class="label">Municipio *</label>
+					<input type="text" class="span2" name="direccion[municipio]" placeholder="Municipio..." required="required"/><br>
+
+<button type="button" onclick="validaform()">Registrar</button>
+		  </form>
+</body>
+</html>
