@@ -1,0 +1,112 @@
+<html>
+<head>
+	<title>Formulario Alta</title>
+   <script type="text/javascript" src="ajax.js"></script>
+</head>
+
+<body>
+
+<form id="cliente" name="cliente">
+
+<input type="text" value="">
+<select id="categoria" name="categoria">
+   <option value="0">Selecciona una Opcion</option>
+</select>
+
+<p>
+<label for="nombre">Nombre: </label>
+<input  id="username" type="text" name="username" placeholder=""autofocus autocomplete required>
+</p>
+
+<p>
+<label for="pass">Contraseña: </label>
+<input type="text" name="pass" id="pass"
+placeholder="qwer123"
+pattern="[a-z](4)[0-9](3)"/> (la contraseña debe contener 4 letras y 3 números)
+</p>
+
+<p>
+<label for="fono">Teléfono: </label>
+<input type="tel" name="fono" id="fono" placeholder="+34935551234">
+</p>
+
+<p>
+<label for="correo">Email: </label>
+<input type="email" name="email" id="email" placeholder="
+ micorreo@dominio.com">
+</p>
+
+<p>
+<label for="web">Página WEB: </label>
+<input type="url" name="web" id="web" placeholder="www.miweb.com">
+</p>
+
+<p>
+<label for="num">Número de zapatos: </label>
+<input type="number" name="num" id="num" min="2" max="20" step="2" placeholder="2">
+</p>
+
+<p>
+<label for="f_envio">Fecha de envio: </label>
+<input type="date" name="f_envio" id="f_envio" min="2013-02-16">
+</p>
+
+<p>
+<label for="buscar">Buscar: </label>
+<input type="search" name="buscar" id="buscar">
+</p>
+
+<p>
+<label for="valora">Valora la web: </label>
+<input type="range" name="valora" id="valora" min="0" max="10"> (entre 0 y 10)
+</p>
+
+<p>
+<fieldset>
+   <legend>Selecciona la prioridad: </legend>
+      <p><label> <input type="radio" name="prior" value="baja" checked> Baja </label></p>
+      <p><label> <input type="radio" name="prior" value="media"> Media </label></p>
+      <p><label> <input type="radio" name="prior" value="alta"> Alta </label></p>
+
+</fieldset>
+</p>
+
+<p>
+<fieldset>
+   <legend>Selecciona el tipo de envio: </legend>
+      <p><label><input type="checkbox" name="envio" value="urgente" checked> Urgente </label></p>
+      <p><label><input type="checkbox" name="envio" value="acuse"> Con acuse de recibo </label></p>
+      <p><label><input type="checkbox" name="envio" value="reembolso"> Contra reembolso </label></p>
+</fieldset>
+</p>
+
+<button type="button" onClick="validaForm()">Registrar</button>
+
+</form>
+   <script type="text/javascript">
+   //funcion para cargar los datos del formulario
+   (cargaForm(){console.log('Se cargo la pagina');
+   
+      //Crear objeto XMLHTTPRequest
+      var ajax = nuevoAjax();
+
+      //Abrir la comunicación asincrona
+      ajax.open("post", "listaCategorias.php",true);
+
+      //Obtener el resultado
+      ajax.onreadystatechange = function(){
+         if(ajax.readyState == 4){
+            //Procesar el resultado como JSON
+            var response = eval(ajax.responseText);
+            console.log(response);
+         }
+      }
+
+   }());
+   </script>
+
+
+</body>
+
+
+</html>

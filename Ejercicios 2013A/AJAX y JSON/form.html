@@ -18,26 +18,85 @@
 			if (ajax.readyState == 4){
 				//Procesar el resultado como JSON
 				var response = eval(ajax.responseText);
-				console.log(response);
-				console.log(response[0].id);
 				//LLenar el elemento "categoria" con los datos del JSON	
 				for(categoria in response){
 					//Crear el elemento option
+					var option = document.createElement('option');
 					//Crear el texto del elemento
+					var texto = document.createTextNode(response[categoria].nombre);
 					//Agregar el texto al elemento
+					option.appendChild(texto);
 					//Agregar los atributos
+					option.setAttribute('value',response[categoria].id);
 					//Agregar el nodo al select
+					var categoria = document.getElementById('categoria');
+					categoria.appendChild(option);
+				}
+				var otro = document.createElement('option');
+				var texto = document.createTextNode('otro...');
+				otro.appendChild(texto);
+				otro.setAttribute('value','-1');
+				categoria.appendChild(otro);
+			}
+		}
+		ajax.send(null);
+	}
+
+function lleneSubCategoria(categoria,target){
+		//Crear objeto XMLHTTPRequest
+		var ajax = nuevoAjax();
+		
+		//Abrir la comunicación asincrona
+		ajax.open("get","listaSubCategorias.php?id="+categoria,true);
+
+		//Obtener el resultado
+		ajax.onreadystatechange = function(){
+			if (ajax.readyState == 4){
+				//Procesar el resultado como JSON
+				var response = eval(ajax.responseText);
+				
+				//LLenar el elemento target con los datos del JSON	
+				for(categoria in response){
+					//Crear el elemento option
+					var option = document.createElement('option');
+					//Crear el texto del elemento
+					var texto = document.createTextNode(response[categoria].nombre);
+					//Agregar el texto al elemento
+					option.appendChild(texto);
+					//Agregar los atributos
+					option.setAttribute('value',response[categoria].id);
+					//Agregar el nodo al select
+					var obj_target = document.getElementById(target);
+					obj_target.appendChild(option);
 				}
 			}
 		}
 		ajax.send(null);
 	}
+
+	function subCategoria(select){
+		var seleccionado = select.selectedIndex
+		if(seleccionado == -1){
+			//Creo un cuadro de texto
+		}
+		else if(seleccionado > 0){
+			//Carga subcategoria
+			var nuevo_select =	document.createElement('select');
+			nuevo_select.setAttribute('id','subcategoria');
+			nuevo_select.setAttribute('name','subcategoria');
+			nuevo_select.innerHTML = '<option value="0">Selecciona subcategoria</option>';
+			var form = document.getElementById('miform');
+			form.appendChild(nuevo_select);
+
+			lleneSubCategoria(seleccionado,nuevo_select.id);
+		}
+	}
 </script>
 </head>
 <body onload="cargaForm();">
 	<form id="miform">
-		<input type="text" value="{nombre}" />
-		<select id="categoria" name="categoria">
+		<input type="text" value="" />
+		<select id="categoria" name="categoria" onChange="subCategoria(this)">
 			<option value="0">Selecciona una opcion...</option>
 		</select>
 	</form>

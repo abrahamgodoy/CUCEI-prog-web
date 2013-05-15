@@ -1,9 +1,9 @@
 <?php
 	$categorias = array(
 							array( 'id' => 1,
-									 'nombre' => 'cat1'),
+									 'nombre' => 'Carnes'),
 							array( 'id' => 2,
-									 'nombre' => 'cat2')
+									 'nombre' => 'Lacteos')
 					 );
 
 	//Generar el json					 
