@@ -52,6 +52,7 @@ function lleneSubCategoria(categoria,target){
 		//Obtener el resultado
 		ajax.onreadystatechange = function(){
 			if (ajax.readyState == 4){
+console.log(ajax.responseText);
 				//Procesar el resultado como JSON
 				var response = eval(ajax.responseText);
 				

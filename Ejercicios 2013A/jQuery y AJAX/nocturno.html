@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title></title>
+</head>
+<body>
+<form>
+	<input type="text" name="algo" id="algo" />
+	<button type="button" onclick="busca()">Haz algo</button>
+</form>
+<!-- Cargar al final del DOM -->
+<script type="text/javascript" src="jquery.min.js"></script>
+
+<script type="text/javascript" >
+
+function busca(){
+var algo = $('#algo').val;
+
+ $.ajax({
+ 	dataType: 'json',
+ 	data: algo,
+ 	url: 'consulta.php',
+ 	type: 'post',
+ 	beforeSend: function(){
+ 			$('button').after('<span>Cargando</span>');
+ 		},
+ 	success: function(response){
+ 			$('button').next().remove();
+ 			$('button').after('<span></span>');
+ 			$('span').html(
+ 				'Id: '+response.id+
+ 				'Nombre: '+response.name+
+ 				'Perfil: '+response.perfil
+ 			);
+ 		}
+ })
+}
+</script>
+</body>
+</html>
